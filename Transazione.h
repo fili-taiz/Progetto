@@ -15,13 +15,11 @@ using namespace std;
 
 class Transazione {
 public:
-    Transazione(const string& tipo, double importo) : tipo(tipo_), importo(importo_);
+    Transazione(const string& tipo_, double importo_) : tipo(tipo_), importo(importo_){};
 
     string getTipo() const;
 
-    double getImporto() const {
-        return importo;
-    }
+    double getImporto() const;
 
 private:
     string tipo;
