@@ -16,9 +16,9 @@ int main() {
     conto1.aggiungiTransazione(t4);
     conto1.aggiungiTransazione(t5);
 
-    conto1.salvaSuFile("C:\\Users\\ft001\\Desktop\\transazioni.txt");
+    conto1.salvaSuFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni.txt");
 
-    conto1.leggiDaFile("C:\\Users\\ft001\\Desktop\\transazioni.txt");
+    conto1.leggiDaFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni.txt");
 
     conto1.stampaTransazioni();
 
