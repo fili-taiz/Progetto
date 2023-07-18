@@ -36,9 +36,9 @@ int main() {
     conto2.aggiungiTransazione(c4);
     conto2.aggiungiTransazione(c5);
 
-    conto2.salvaSuFile("C:\\Users\\ft001\\Desktop\\transazioni2.txt");
+    conto2.salvaSuFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni2.txt");
 
-    conto2.leggiDaFile("C:\\Users\\ft001\\Desktop\\transazioni2.txt");
+    conto2.leggiDaFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni2.txt");
 
     conto2.stampaTransazioni();
 
