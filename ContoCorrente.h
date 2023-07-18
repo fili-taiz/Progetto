@@ -15,6 +15,10 @@ public:
 
     void stampaTransazioni() const;
 
+    int getNumeroTransazioni()const;
+
+    const Transazione& getTransazioneAtIndex(int index)const;
+
 private:
     vector<Transazione> transazioni;
 };

@@ -51,3 +51,16 @@ void ContoCorrente::stampaTransazioni() const {
         cout << "Tipo: " << transazione.getTipo() << "| Importo: " << transazione.getImporto() << "\tEURO" << std::endl;
     }
 }
+
+int ContoCorrente::getNumeroTransazioni() const {
+    return transazioni.size();
+}
+
+const Transazione &ContoCorrente::getTransazioneAtIndex(int index) const {
+    if (index >= 0 && index < transazioni.size()) {
+        return transazioni[index];
+    }
+    // In caso di indice non valido, restituiamo una transazione vuota.
+    static Transazione transazioneVuota("", 0.0);
+    return transazioneVuota;
+}
