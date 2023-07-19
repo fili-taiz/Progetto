@@ -1,0 +1,5 @@
+Entrata|431
+Uscita|500
+Entrata|832
+Entrata|12
+Uscita|999.5
