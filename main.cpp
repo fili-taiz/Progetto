@@ -16,9 +16,9 @@ int main() {
     conto1.aggiungiTransazione(t4);
     conto1.aggiungiTransazione(t5);
 
-    conto1.salvaSuFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni.txt");
+    conto1.salvaSuFile("transazioni1.txt");
 
-    conto1.leggiDaFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni.txt");
+    conto1.leggiDaFile("transazioni1.txt");
 
     conto1.stampaTransazioni();
 
@@ -36,9 +36,9 @@ int main() {
     conto2.aggiungiTransazione(c4);
     conto2.aggiungiTransazione(c5);
 
-    conto2.salvaSuFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni2.txt");
+    conto2.salvaSuFile("transazioni2.txt");
 
-    conto2.leggiDaFile("C:\\Users\\ft001\\Desktop\\Elaborato\\transazioni2.txt");
+    conto2.leggiDaFile("transazioni2.txt");
 
     conto2.stampaTransazioni();
 
