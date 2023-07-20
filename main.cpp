@@ -36,6 +36,8 @@ int main() {
     conto2.aggiungiTransazione(c4);
     conto2.aggiungiTransazione(c5);
 
+    cout<<"---------"<<endl;
+
     conto2.salvaSuFile("transazioni2.txt");
 
     conto2.leggiDaFile("transazioni2.txt");
