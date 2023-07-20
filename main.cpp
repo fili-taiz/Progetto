@@ -38,6 +38,7 @@ int main() {
 
     cout<<"---------"<<endl;
 
+
     conto2.salvaSuFile("transazioni2.txt");
 
     conto2.leggiDaFile("transazioni2.txt");
