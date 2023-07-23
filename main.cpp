@@ -2,48 +2,33 @@
 #include "ContoCorrente.h"
 
 int main() {
-    ContoCorrente conto1;
+    ContoCorrente conto;
 
-    Transazione t1("Entrata", 431.0);
-    Transazione t2("Uscita", 500.0);
-    Transazione t3("Entrata", 832.0);
-    Transazione t4("Entrata", 12.0);
-    Transazione t5("Uscita", 999.5);
-
-    conto1.aggiungiTransazione(t1);
-    conto1.aggiungiTransazione(t2);
-    conto1.aggiungiTransazione(t3);
-    conto1.aggiungiTransazione(t4);
-    conto1.aggiungiTransazione(t5);
-
-    conto1.salvaSuFile("transazioni1.txt");
-
-    conto1.leggiDaFile("transazioni1.txt");
-
-    conto1.stampaTransazioni();
-
-    ContoCorrente conto2;
-
-    Transazione c1("Entrata", 10111);
-    Transazione c2("Entrata", 20299);
-    Transazione c3("Uscita", 10876.98);
-    Transazione c4("Entrata", 21876);
-    Transazione c5("Uscita", 876.65);
-
-    conto2.aggiungiTransazione(c1);
-    conto2.aggiungiTransazione(c2);
-    conto2.aggiungiTransazione(c3);
-    conto2.aggiungiTransazione(c4);
-    conto2.aggiungiTransazione(c5);
-
-    cout<<"---------"<<endl;
+    conto.effettuaTransazione(Transazione(100.0, "2023-07-22")); // Entrata di 100 euro
+    conto.effettuaTransazione(Transazione(-90.0, "2023-07-23")); // Uscita di 90 euro
+    conto.effettuaTransazione(Transazione(200.0, "2023-07-24")); // Entrata di 200 euro
 
 
-    conto2.salvaSuFile("transazioni2.txt");
+   vector<Transazione> transazioniData = conto.cercaTransazioniInBaseAllaData("2023-07-23");
+    cout << "Transazioni del 2023-07-23:" << endl;
+    for (const Transazione& trans : transazioniData) {
+        cout << "Importo: " << trans.getImporto() << " euro" << endl;
+    }
 
-    conto2.leggiDaFile("transazioni2.txt");
+    conto.CancellaTransazioniPerData("2023-07-23");
+    cout << "Saldo corrente dopo cancellazione: " << conto.getSaldo() << " euro" << endl;
 
-    conto2.stampaTransazioni();
+    // Stampa tutte le transazioni
+    conto.stampaTransazioni();
+
+    // Salva le transazioni su file
+    conto.salvaSuFile("transazioni.txt");
+
+    // Carica le transazioni da file
+    conto.leggiDaFile("transazioni.txt");
+
+    cout<<"-----------"<<endl;
+
 
     return 0;
 }
