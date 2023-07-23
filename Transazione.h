@@ -13,17 +13,22 @@
 
 using namespace std;
 
+
+
 class Transazione {
 public:
-    Transazione(const string& tipo_, double importo_);
+    Transazione(double importo_, const string& data_);
 
-    string getTipo() const;
 
     double getImporto() const;
 
+    string getData() const;
+
+//data e conto d'uscita o d'ingresso (valore negativo o positivo)
+
 private:
-    string tipo;
     double importo;
+    string data;
 };
 
 

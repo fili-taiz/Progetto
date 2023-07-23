@@ -5,21 +5,28 @@
 #ifndef PROGETTO_CONTOCORRENTE_H
 #define PROGETTO_CONTOCORRENTE_H
 #include "Transazione.h"
+#include "algorithm"
 class ContoCorrente {
 public:
-    void aggiungiTransazione(const Transazione& transazione);
+    void effettuaTransazione(const Transazione& transazione);
 
     void salvaSuFile(const string& nomeFile);
 
     void leggiDaFile(const string& nomeFile);
 
+    double getSaldo() const;
+
     void stampaTransazioni() const;
 
-    int getNumeroTransazioni()const;
+    vector<Transazione> cercaTransazioniInBaseAllaData(const string& data) const;
 
-    const Transazione& getTransazioneAtIndex(int index)const;
+    void CancellaTransazioniPerData(const string& data);
+
+
+
 
 private:
+    double saldo = 0;
     vector<Transazione> transazioni;
 };
 

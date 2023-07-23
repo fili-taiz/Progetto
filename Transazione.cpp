@@ -5,12 +5,12 @@
 #include "Transazione.h"
 
 
-Transazione::Transazione(const std::string &tipo_, double importo_) : tipo(tipo_), importo(importo_) {}
-
-string Transazione::getTipo() const {
-    return tipo;
-}
+Transazione::Transazione(double importo_, const string& data_) : importo(importo_), data(data_) {}
 
 double Transazione::getImporto() const {
     return importo;
+}
+
+string Transazione::getData() const {
+    return data;
 }

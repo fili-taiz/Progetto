@@ -4,63 +4,76 @@
 
 #include "ContoCorrente.h"
 
-void ContoCorrente::aggiungiTransazione(const Transazione &transazione) {
+void ContoCorrente::effettuaTransazione(const Transazione &transazione) {
     transazioni.push_back(transazione);
+    if(transazione.getImporto() > 0){
+        cout<<"Deposito sul conto avvenuto con successo!"<<endl;
+    } else if(transazione.getImporto() < 0){
+        cout<<"Prelievo avvenuto con successo!"<<endl;
+    }
+    saldo+=transazione.getImporto();
+    cout<<"Saldo corrente:"<< getSaldo()<< "euro" << endl;
 }
 
 void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
     ofstream file(nomeFile);
     if (!file) {
-        cerr << "Errore nell'apertura del file." << std::endl;
+        cerr << "Errore nell'apertura del file." << endl;
         return;
     }
+    transazioni.clear();
 
     for (const Transazione& transazione : transazioni) {
-        file << transazione.getTipo() << "|" << transazione.getImporto() << std::endl;
+        file << transazione.getData() << " " << transazione.getImporto() << std::endl;
     }
 
     file.close();
 }
 
-void ContoCorrente::leggiDaFile(const std::string &nomeFile) {
-    transazioni.clear();
+void ContoCorrente::leggiDaFile(const string &nomeFile) {
     ifstream file(nomeFile);
-    if (!file) {
-        std::cerr << "Errore nell'apertura del file." << std::endl;
-        return;
-    }
-
-    string linea;
-    while (std::getline(file, linea)) {
-        std::string tipo;
+    if (file.is_open()) {
+        transazioni.clear();
+        std::string data;
         double importo;
-        size_t separatorePos = linea.find('|');
-        if (separatorePos != string::npos) {
-            tipo = linea.substr(0, separatorePos);
-            importo = stod(linea.substr(separatorePos + 1));
-            Transazione transazione(tipo, importo);
-            transazioni.push_back(transazione);
+        while (file >> data >> importo) {
+            effettuaTransazione(Transazione(importo, data));
         }
+        file.close();
+    } else {
+        cerr << "Impossibile aprire il file " << nomeFile << " per la lettura." << endl;
     }
-
-    file.close();
 }
 
 void ContoCorrente::stampaTransazioni() const {
-    for (const Transazione& transazione : transazioni) {
-        cout << "Tipo: " << transazione.getTipo() << "| Importo: " << transazione.getImporto() << "\tEURO" << std::endl;
+    cout << "Transazioni:" << endl;
+    for (const Transazione& trans : transazioni) {
+        cout << "Data: " << trans.getData() << ", Importo: " << trans.getImporto() << " euro" << endl;
     }
 }
 
-int ContoCorrente::getNumeroTransazioni() const {
-    return transazioni.size();
+
+
+double ContoCorrente::getSaldo() const {
+    return saldo;
 }
 
-const Transazione &ContoCorrente::getTransazioneAtIndex(int index) const {
-    if (index >= 0 && index < transazioni.size()) {
-        return transazioni[index];
+vector<Transazione> ContoCorrente::cercaTransazioniInBaseAllaData(const std::string &data) const {
+    vector<Transazione> transazioniData;
+    for(const Transazione& t: transazioni){
+        if(t.getData() == data){
+            transazioniData.push_back(t);
+        }
     }
-    // In caso di indice non valido, restituiamo una transazione vuota.
-    static Transazione transazioneVuota("", 0.0);
-    return transazioneVuota;
+    return transazioniData;
 }
+
+void ContoCorrente::CancellaTransazioniPerData(const string &data) {
+    transazioni.erase(
+            std::remove_if(transazioni.begin(), transazioni.end(),
+                           [data](const Transazione& tr) { return tr.getData() == data; }),
+            transazioni.end()
+    );
+
+}
+
