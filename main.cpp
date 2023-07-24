@@ -22,10 +22,10 @@ int main() {
     conto.stampaTransazioni();
 
     // Salva le transazioni su file
-    conto.salvaSuFile("transazioni1.txt");
+    conto.salvaSuFile("transazioni.txt");
 
-    // Carica le transazioni da file
-    conto.leggiDaFile("transazioni1.txt");
+    // Legge le transazioni da file
+    conto.leggiDaFile("transazioni.txt");
 
     cout<<"-----------"<<endl;
 

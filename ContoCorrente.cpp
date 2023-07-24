@@ -21,7 +21,7 @@ void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
         cerr << "Errore nell'apertura del file." << endl;
         return;
     }
-    transazioni.clear();
+
 
     for (const Transazione& transazione : transazioni) {
         file << transazione.getData() << " " << transazione.getImporto() << std::endl;
@@ -31,19 +31,25 @@ void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
 }
 
 void ContoCorrente::leggiDaFile(const string &nomeFile) {
+    transazioni.clear();
     ifstream file(nomeFile);
     if (file.is_open()) {
-        transazioni.clear();
-        std::string data;
+        string data;
         double importo;
         while (file >> data >> importo) {
-            effettuaTransazione(Transazione(importo, data));
+            transazioni.emplace_back(Transazione(importo, data));
         }
         file.close();
     } else {
         cerr << "Impossibile aprire il file " << nomeFile << " per la lettura." << endl;
     }
+    // Aggiornare il saldo utilizzando le transazioni lette da file
+    saldo = 0.0;
+    for (const Transazione& transazione : transazioni) {
+        saldo += transazione.getImporto();
+    }
 }
+
 
 void ContoCorrente::stampaTransazioni() const {
     cout << "Transazioni:" << endl;
