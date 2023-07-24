@@ -6,6 +6,7 @@ int main() {
 
     conto.effettuaTransazione(Transazione(100.0, "2023-07-22")); // Entrata di 100 euro
     conto.effettuaTransazione(Transazione(-90.0, "2023-07-23")); // Uscita di 90 euro
+    conto.effettuaTransazione(Transazione(-5.0, "2023-07-23")); // Uscita di 90 euro
     conto.effettuaTransazione(Transazione(200.0, "2023-07-24")); // Entrata di 200 euro
 
 
