@@ -21,6 +21,7 @@ public:
     vector<Transazione> cercaTransazioniPerTipo(Transazione::TipoTransazione tipo) const;
 
     bool CancellaTransazioniPerData(const year_month_day& data);
+    bool CancellaTransazioniPerImporto(double importo);
     friend bool operator==(Transazione::TipoTransazione sx, Transazione::TipoTransazione dx){
         return sx == dx;
     }

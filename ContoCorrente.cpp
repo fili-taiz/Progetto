@@ -194,6 +194,30 @@ vector<Transazione>::iterator ContoCorrente::trovaTransazione(const year_month_d
     });
 }
 
+bool ContoCorrente::CancellaTransazioniPerImporto(double importo) {
+    double importoCancellato = 0.0;
+    bool cancellazioneAvvenuta = false;
+
+    auto newEnd = remove_if(transazioni.begin(), transazioni.end(), [importo, &importoCancellato, &cancellazioneAvvenuta](const Transazione& tr) {
+        if (tr.getImporto() == importo) {
+            importoCancellato += tr.getImporto();
+            cancellazioneAvvenuta = true;
+            return true;
+        }
+        return false;
+    });
+
+    if (cancellazioneAvvenuta) {
+        transazioni.erase(newEnd, transazioni.end());
+        saldo -= importoCancellato;
+        cout << "Le transazioni con importo " << importo << " euro sono state cancellate!" << endl;
+        cout << "Saldo corrente dopo la cancellazione: " << getSaldo() << " euro" << endl;
+    } else {
+        throw runtime_error("Nessuna transazione trovata con importo " + to_string(importo) + " euro. La cancellazione non e' avvenuta.");
+    }
+
+    return cancellazioneAvvenuta;
+}
 
 
 
