@@ -12,8 +12,8 @@ public:
     void effettuaTransazione(const Transazione& transazione);
     void salvaSuFile(const string& nomeFile);
     void leggiDaFile(const string& nomeFile);
+    void stampaTransazioni()const;
     double getSaldo() const;
-    void stampaTransazioni() const;
 
     vector<Transazione> cercaTransazioniInBaseAllaData(const year_month_day& data) const;
     vector<Transazione> cercaTransazioniPerImporto(double importo) const;

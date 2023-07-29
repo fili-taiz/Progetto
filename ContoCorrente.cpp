@@ -51,36 +51,50 @@ void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
         return;
     }
     for (const Transazione& transazione : transazioni) {
-        file << format("%Y-%m-%d", transazione.getData()) << " " << transazione.getImporto() << endl;
-        file << Transazione::TipoTransazioneToChar(transazione.getTipo()) << endl;
+        file << format("%Y-%m-%d", transazione.getData()) << " " << transazione.getImporto() << Transazione::TipoTransazioneToChar(transazione.getTipo()) << endl;
     }
 
     file.close();
 }
 
 void ContoCorrente::leggiDaFile(const string &nomeFile) {
-    transazioni.clear();
     ifstream file(nomeFile);
-    if (file.is_open()) {
+    if (!file.is_open()) {
+        cerr << "Impossibile aprire il file " << nomeFile << " per la lettura." << endl;
+        return;
+    }
+
+    try {
         string dataStr;
         double importo;
         char tipoChar;
         string descr;
-        while (getline(file,dataStr, ' ') >> importo >> tipoChar) {
+        while (file >> dataStr >> importo >> tipoChar) {
             Transazione::TipoTransazione tipo = Transazione::CharToTipoTransazione(tipoChar);
-            file.ignore();
+            file.ignore(); // Ignora il carattere di newline dopo il carattere tipoChar
             getline(file, descr);
+
+            // Verifica se l'estrazione dei dati è avvenuta correttamente
+            if (!file) {
+                cerr << "Errore nella lettura dei dati dalla transazione." << endl;
+                break;
+            }
+
             year_month_day data = parseDate(dataStr);
             transazioni.emplace_back(importo, data, descr, tipo);
         }
+
         file.close();
-    } else {
-        cerr << "Impossibile aprire il file " << nomeFile << " per la lettura." << endl;
+    } catch (const exception& e) {
+        cerr << "Errore durante la lettura del file: " << e.what() << endl;
+        file.close(); // Chiudi il file in caso di errore
+        return;
     }
 
     // Aggiornare il saldo utilizzando le transazioni lette da file
     aggiornaSaldo();
 }
+
 
 
 void ContoCorrente::stampaTransazioni() const {
