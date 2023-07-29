@@ -5,23 +5,26 @@
 #ifndef PROGETTO_CONTOCORRENTE_H
 #define PROGETTO_CONTOCORRENTE_H
 #include "Transazione.h"
-#include "algorithm"
+#include <algorithm>
+#include <exception>
 class ContoCorrente {
 public:
     void effettuaTransazione(const Transazione& transazione);
-
     void salvaSuFile(const string& nomeFile);
-
     void leggiDaFile(const string& nomeFile);
-
     double getSaldo() const;
-
     void stampaTransazioni() const;
 
-    vector<Transazione> cercaTransazioniInBaseAllaData(const string& data) const;
+    vector<Transazione> cercaTransazioniInBaseAllaData(const year_month_day& data) const;
+    vector<Transazione> cercaTransazioniPerImporto(double importo) const;
+    vector<Transazione> cercaTransazioniPerDescrizione(const string& descrizione) const;
+    vector<Transazione> cercaTransazioniPerTipo(Transazione::TipoTransazione tipo) const;
 
+    bool CancellaTransazioniPerData(const year_month_day& data);
+    friend bool operator==(Transazione::TipoTransazione sx, Transazione::TipoTransazione dx){
+        return sx == dx;
+    }
 
-    void CancellaTransazioniPerData(const string& data);
 
 
 
@@ -29,6 +32,8 @@ public:
 private:
     double saldo = 0;
     vector<Transazione> transazioni;
+    void aggiornaSaldo();
+    vector<Transazione>::iterator trovaTransazione(const year_month_day& data, const string& descrizione);
 };
 
 

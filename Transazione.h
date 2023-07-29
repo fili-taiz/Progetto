@@ -10,10 +10,10 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include "date/include/date/date.h"
 
 using namespace std;
-
-
+using namespace date;
 
 class Transazione {
 public:
@@ -22,22 +22,28 @@ public:
         ENTRATA,
         USCITA
     };
-    Transazione(double importo_, const string& data_, TipoTransazione tipo_);
-
+    Transazione(double importo, year_month_day data, const string& descrizione, TipoTransazione tipo);
 
     double getImporto() const;
-
-    string getData() const;
-
+    year_month_day getData() const;
     TipoTransazione getTipo()const;
-
-
+    string getDescrizione()const;
+    string toString() const;
+    friend ostream& operator<<(ostream& os, TipoTransazione tipo);
+    bool operator==(const Transazione& otherobj) const;
+    static TipoTransazione CharToTipoTransazione(char c);
+    static char TipoTransazioneToChar(TipoTransazione tipo);
 
 private:
     double importo;
-    string data;
+    year_month_day data;
     TipoTransazione tipo;
+    string descrizione;
 };
 
 
 #endif //PROGETTO_TRANSAZIONE_H
+
+//aggiungere una stringa di descrizione es. bonifico e che la data sia più sicura
+
+//transazione ha un metodo tostring che trasforma la transazione in una stringa che usa stampatransazioni
