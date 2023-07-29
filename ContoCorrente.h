@@ -20,6 +20,7 @@ public:
 
     vector<Transazione> cercaTransazioniInBaseAllaData(const string& data) const;
 
+
     void CancellaTransazioniPerData(const string& data);
 
 

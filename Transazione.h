@@ -17,18 +17,26 @@ using namespace std;
 
 class Transazione {
 public:
-    Transazione(double importo_, const string& data_);
+
+    enum class TipoTransazione{
+        ENTRATA,
+        USCITA
+    };
+    Transazione(double importo_, const string& data_, TipoTransazione tipo_);
 
 
     double getImporto() const;
 
     string getData() const;
 
+    TipoTransazione getTipo()const;
+
 //data e conto d'uscita o d'ingresso (valore negativo o positivo)
 
 private:
     double importo;
     string data;
+    TipoTransazione tipo;
 };
 
 

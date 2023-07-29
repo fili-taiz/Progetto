@@ -5,7 +5,7 @@
 #include "Transazione.h"
 
 
-Transazione::Transazione(double importo_, const string& data_) : importo(importo_), data(data_) {}
+Transazione::Transazione(double importo_, const string& data_, TipoTransazione tipo_) : importo(importo_), data(data_), tipo(tipo_) {}
 
 double Transazione::getImporto() const {
     return importo;
@@ -13,4 +13,8 @@ double Transazione::getImporto() const {
 
 string Transazione::getData() const {
     return data;
+}
+
+Transazione::TipoTransazione Transazione::getTipo() const {
+    return tipo;
 }

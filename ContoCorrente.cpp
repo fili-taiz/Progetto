@@ -5,14 +5,26 @@
 #include "ContoCorrente.h"
 
 void ContoCorrente::effettuaTransazione(const Transazione &transazione) {
-    transazioni.push_back(transazione);
-    if(transazione.getImporto() > 0){
-        cout<<"Deposito sul conto avvenuto con successo!"<<endl;
-    } else if(transazione.getImporto() < 0){
-        cout<<"Prelievo avvenuto con successo!"<<endl;
+    if (transazione.getTipo() == Transazione::TipoTransazione::ENTRATA) {
+        transazioni.push_back(transazione);
+        cout << "Deposito sul conto avvenuto con successo!" << endl;
+    } else if (transazione.getTipo() == Transazione::TipoTransazione::USCITA) {
+        // Verifica se c'è abbastanza saldo per il prelievo
+        if (saldo + transazione.getImporto() >= 0) {
+            transazioni.push_back(transazione);
+            cout << "Prelievo avvenuto con successo!" << endl;
+        } else {
+            cout << "Impossibile effettuare il prelievo. Saldo insufficiente." << endl;
+            return;
+        }
     }
-    saldo+=transazione.getImporto();
-    cout<<"Saldo corrente:"<< getSaldo()<< "euro" << endl;
+
+    if(transazione.getTipo() == Transazione::TipoTransazione::ENTRATA) {
+        saldo += transazione.getImporto();
+    } else{
+        saldo-=transazione.getImporto();
+    }
+    cout << "Saldo corrente: " << getSaldo() << " euro" << endl;
 }
 
 void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
@@ -25,6 +37,12 @@ void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
 
     for (const Transazione& transazione : transazioni) {
         file << transazione.getData() << " " << transazione.getImporto() << std::endl;
+        if (transazione.getTipo() == Transazione::TipoTransazione::ENTRATA) {
+            file << "ENTRATA";
+        } else {
+            file << "USCITA";
+        }
+        file << endl;
     }
 
     file.close();
@@ -36,8 +54,19 @@ void ContoCorrente::leggiDaFile(const string &nomeFile) {
     if (file.is_open()) {
         string data;
         double importo;
-        while (file >> data >> importo) {
-            transazioni.emplace_back(Transazione(importo, data));
+        string tipoStr;
+        while (file >> data >> importo >> tipoStr) {
+            Transazione::TipoTransazione tipo;
+            if (tipoStr == "ENTRATA") {
+                tipo = Transazione::TipoTransazione::ENTRATA;
+            } else if (tipoStr == "USCITA") {
+                tipo = Transazione::TipoTransazione::USCITA;
+            } else {
+                cerr << "Errore nella lettura del tipo di transazione dal file." << endl;
+                file.close();
+                return;
+            }
+            transazioni.emplace_back(Transazione(importo, data, tipo));
         }
         file.close();
     } else {
@@ -74,21 +103,25 @@ vector<Transazione> ContoCorrente::cercaTransazioniInBaseAllaData(const std::str
     return transazioniData;
 }
 
-void ContoCorrente::CancellaTransazioniPerData(const string &data) {
-    double importo_canc = 0;
+void ContoCorrente::CancellaTransazioniPerData(const string& data) {
+    double importoCancellato = 0.0;
+
+    // Utilizziamo l'algoritmo erase-remove idiom per cancellare le transazioni con la data specificata
     transazioni.erase(
-            std::remove_if(transazioni.begin(), transazioni.end(),
-                           [data, &importo_canc](const Transazione& tr) {
-                if(tr.getData() == data){
-                    importo_canc+=tr.getImporto();
+            std::remove_if(transazioni.begin(), transazioni.end(), [data, &importoCancellato](const Transazione& tr) {
+                if (tr.getData() == data) {
+                    importoCancellato += tr.getTipo() == Transazione::TipoTransazione::ENTRATA ? tr.getImporto() : -tr.getImporto();
                     return true;
                 }
-                return false; }),
+                return false;
+            }),
             transazioni.end()
     );
 
-    saldo+=importo_canc;
-    cout<<"Le transazioni in data \t"<<data<<"\tsono state cancellate!"<<endl;
-    cout<<"Saldo corrente dopo la cancellazione:"<<getSaldo()<<"euro"<<endl;
+    saldo += importoCancellato;
+    cout << "Le transazioni in data " << data << " sono state cancellate!" << endl;
+    cout << "Saldo corrente dopo la cancellazione: " << getSaldo() << " euro" << endl;
 }
+
+
 
