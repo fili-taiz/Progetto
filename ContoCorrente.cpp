@@ -106,7 +106,6 @@ vector<Transazione> ContoCorrente::cercaTransazioniInBaseAllaData(const std::str
 void ContoCorrente::CancellaTransazioniPerData(const string& data) {
     double importoCancellato = 0.0;
 
-    // Utilizziamo l'algoritmo erase-remove idiom per cancellare le transazioni con la data specificata
     transazioni.erase(
             std::remove_if(transazioni.begin(), transazioni.end(), [data, &importoCancellato](const Transazione& tr) {
                 if (tr.getData() == data) {
