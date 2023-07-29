@@ -75,11 +75,20 @@ vector<Transazione> ContoCorrente::cercaTransazioniInBaseAllaData(const std::str
 }
 
 void ContoCorrente::CancellaTransazioniPerData(const string &data) {
+    double importo_canc = 0;
     transazioni.erase(
             std::remove_if(transazioni.begin(), transazioni.end(),
-                           [data](const Transazione& tr) { return tr.getData() == data; }),
+                           [data, &importo_canc](const Transazione& tr) {
+                if(tr.getData() == data){
+                    importo_canc+=tr.getImporto();
+                    return true;
+                }
+                return false; }),
             transazioni.end()
     );
 
+    saldo+=importo_canc;
+    cout<<"Le transazioni in data \t"<<data<<"\tsono state cancellate!"<<endl;
+    cout<<"Saldo corrente dopo la cancellazione:"<<getSaldo()<<"euro"<<endl;
 }
 
