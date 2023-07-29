@@ -31,7 +31,7 @@ public:
 
     TipoTransazione getTipo()const;
 
-//data e conto d'uscita o d'ingresso (valore negativo o positivo)
+
 
 private:
     double importo;
