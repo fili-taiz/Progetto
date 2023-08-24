@@ -55,4 +55,3 @@ private:
 
 //aggiungere una stringa di descrizione es. bonifico e che la data sia più sicura
 
-//transazione ha un metodo tostring che trasforma la transazione in una stringa che usa stampatransazioni

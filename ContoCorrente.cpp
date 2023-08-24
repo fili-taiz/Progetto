@@ -5,7 +5,6 @@
 #include "ContoCorrente.h"
 #include <sstream>
 #include <iomanip>
-#include <ctime>
 
 year_month_day parseDate(const string &DataStr) {
     istringstream ss(DataStr);
