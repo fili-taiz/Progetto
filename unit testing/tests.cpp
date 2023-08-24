@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "Transazione.h"
-#include "ContoCorrente.h"
+#include "../Transazione.h"
+#include "../ContoCorrente.h"
 
 // Test della classe Transazione
 TEST(TransazioneTest, TestCostruttore) {
