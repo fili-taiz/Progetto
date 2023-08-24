@@ -7,17 +7,23 @@ int main() {
     try {
         ContoCorrente conto;
 
-        conto.effettuaTransazione(Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico",Transazione::TipoTransazione::ENTRATA));
-        conto.effettuaTransazione(Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
-        conto.effettuaTransazione(Transazione(5.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
-        conto.effettuaTransazione(Transazione(200.0, year_month_day{2023_y / 07 / 24}, "bonifico",Transazione::TipoTransazione::ENTRATA));
-        conto.effettuaTransazione(Transazione(90.0, year_month_day{2023_y / 07 / 25}, "prelievo", Transazione::TipoTransazione::USCITA));
+        conto.effettuaTransazione(Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico",
+                                              Transazione::TipoTransazione::ENTRATA));
+        conto.effettuaTransazione(
+                Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
+        conto.effettuaTransazione(
+                Transazione(5.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
+        conto.effettuaTransazione(Transazione(200.0, year_month_day{2023_y / 07 / 24}, "bonifico",
+                                              Transazione::TipoTransazione::ENTRATA));
+        conto.effettuaTransazione(
+                Transazione(90.0, year_month_day{2023_y / 07 / 25}, "prelievo", Transazione::TipoTransazione::USCITA));
 
         cout << "\nTRANSAZIONI IN BASE ALLA DATA" << endl;
         vector<Transazione> transazioniData = conto.cercaTransazioniInBaseAllaData(year_month_day{2023_y / 07 / 23});
         cout << "Transazioni del 2023-07-23:" << endl;
         for (const Transazione &trans: transazioniData) {
-            cout << "Importo: " << trans.getImporto() << " euro, Descrizione: " << trans.getDescrizione() << ", Tipo:"<< trans.getTipo() << endl;
+            cout << "Importo: " << trans.getImporto() << " euro, Descrizione: " << trans.getDescrizione() << ", Tipo:"
+                 << trans.getTipo() << endl;
         }
         if (!transazioniData.empty()) {
             cout << "\nCANCELLA TRANSAZIONI PER DATA" << endl;
@@ -31,7 +37,8 @@ int main() {
         vector<Transazione> transazioniPerImporto = conto.cercaTransazioniPerImporto(importoCercato);
         cout << "Transazioni con importo di " << importoCercato << " euro:" << endl;
         for (const Transazione &trans: transazioniPerImporto) {
-            cout << "Data: " << trans.getData() << ", Descrizione: " << trans.getDescrizione() << ", Tipo: "<< trans.getTipo() << endl;
+            cout << "Data: " << trans.getData() << ", Descrizione: " << trans.getDescrizione() << ", Tipo: "
+                 << trans.getTipo() << endl;
         }
 
         cout << "\nTRANSAZIONI IN BASE ALLA DESCRIZIONE" << endl;
@@ -39,7 +46,8 @@ int main() {
         vector<Transazione> transazioniPerDescrizione = conto.cercaTransazioniPerDescrizione(descrizioneCercata);
         cout << "Transazioni con descrizione \"" << descrizioneCercata << "\":" << endl;
         for (const Transazione &trans: transazioniPerDescrizione) {
-            cout << "Data: " << trans.getData() << ", Importo: " << trans.getImporto() << " euro, Tipo: "<< trans.getTipo() << endl;
+            cout << "Data: " << trans.getData() << ", Importo: " << trans.getImporto() << " euro, Tipo: "
+                 << trans.getTipo() << endl;
         }
 
         cout << "\nTRANSAZIONI IN BASE AL TIPO" << endl;
@@ -47,7 +55,8 @@ int main() {
         vector<Transazione> transazioniPerTipo = conto.cercaTransazioniPerTipo(tipoCercato);
 
         cout << "STAMPA LE TRANSAZIONI DI UN TIPO" << endl;
-        cout << "Transazioni di tipo " << (tipoCercato == Transazione::TipoTransazione::ENTRATA ? "ENTRATA" : "USCITA")<< ":" << endl;
+        cout << "Transazioni di tipo " << (tipoCercato == Transazione::TipoTransazione::ENTRATA ? "ENTRATA" : "USCITA")
+             << ":" << endl;
         for (const Transazione &trans: transazioniPerTipo) {
             cout << trans.toString() << endl;
         }
@@ -65,7 +74,7 @@ int main() {
         double importoDaCancellare = 100.0;
         try {
             conto.CancellaTransazioniPerImporto(importoDaCancellare);
-        } catch (const exception& e) {
+        } catch (const exception &e) {
             cerr << "Errore durante la cancellazione delle transazioni per importo: " << e.what() << endl;
         }
 
@@ -82,7 +91,7 @@ int main() {
         cout << "-----------" << endl;
 
 
-    }catch (const exception& e) {
+    } catch (const exception &e) {
         cerr << "Errore: " << e.what() << endl;
     }
 

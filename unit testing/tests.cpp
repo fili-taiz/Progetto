@@ -124,10 +124,14 @@ TEST(ContoCorrenteTest, CancellaTransazioniPerImporto) {
     ContoCorrente conto;
 
     // Aggiungiamo alcune transazioni al conto
-    conto.effettuaTransazione(Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico", Transazione::TipoTransazione::ENTRATA));
-    conto.effettuaTransazione(Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
-    conto.effettuaTransazione(Transazione(200.0, year_month_day{2023_y / 07 / 24}, "bonifico", Transazione::TipoTransazione::ENTRATA));
-    conto.effettuaTransazione(Transazione(90.0, year_month_day{2023_y / 07 / 25}, "prelievo", Transazione::TipoTransazione::USCITA));
+    conto.effettuaTransazione(
+            Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico", Transazione::TipoTransazione::ENTRATA));
+    conto.effettuaTransazione(
+            Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
+    conto.effettuaTransazione(
+            Transazione(200.0, year_month_day{2023_y / 07 / 24}, "bonifico", Transazione::TipoTransazione::ENTRATA));
+    conto.effettuaTransazione(
+            Transazione(90.0, year_month_day{2023_y / 07 / 25}, "prelievo", Transazione::TipoTransazione::USCITA));
 
     // Cancella transazioni con importo 90.0
     ASSERT_NO_THROW(conto.CancellaTransazioniPerImporto(100.0));

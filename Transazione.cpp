@@ -5,7 +5,8 @@
 #include "Transazione.h"
 
 
-Transazione::Transazione(double importo, year_month_day data, const string& descrizione, TipoTransazione tipo) : importo(importo), data(data), descrizione(descrizione), tipo(tipo) {}
+Transazione::Transazione(double importo, year_month_day data, const string &descrizione, TipoTransazione tipo)
+        : importo(importo), data(data), descrizione(descrizione), tipo(tipo) {}
 
 double Transazione::getImporto() const {
     return importo;
@@ -26,11 +27,12 @@ string Transazione::getDescrizione() const {
 string Transazione::toString() const {
     string tipoStr = (tipo == TipoTransazione::ENTRATA) ? "E" : "U";
     stringstream ss;
-    ss << "Data: " << data << ", Importo: " << importo << " euro, Tipo: " << tipoStr << ", Descrizione: " << descrizione;
+    ss << "Data: " << data << ", Importo: " << importo << " euro, Tipo: " << tipoStr << ", Descrizione: "
+       << descrizione;
     return ss.str();
 }
 
-ostream& operator<<(ostream& os, Transazione::TipoTransazione tipo) {
+ostream &operator<<(ostream &os, Transazione::TipoTransazione tipo) {
     switch (tipo) {
         case Transazione::TipoTransazione::ENTRATA:
             os << "ENTRATA";
@@ -44,9 +46,9 @@ ostream& operator<<(ostream& os, Transazione::TipoTransazione tipo) {
 
 bool Transazione::operator==(const Transazione &otherobj) const {
     return (importo == otherobj.importo) &&
-    (data == otherobj.data) &&
-    (descrizione == otherobj.descrizione) &&
-    (tipo == otherobj.tipo);
+           (data == otherobj.data) &&
+           (descrizione == otherobj.descrizione) &&
+           (tipo == otherobj.tipo);
 
 }
 
