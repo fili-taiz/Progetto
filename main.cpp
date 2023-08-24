@@ -25,12 +25,12 @@ int main() {
             cout << "Importo: " << trans.getImporto() << " euro, Descrizione: " << trans.getDescrizione() << ", Tipo:"
                  << trans.getTipo() << endl;
         }
-        if (!transazioniData.empty()) {
             cout << "\nCANCELLA TRANSAZIONI PER DATA" << endl;
-            conto.CancellaTransazioniPerData(year_month_day{2023_y / 07 / 23});
-        } else {
-            cout << "\nNessuna transazione trovata in data 2023-07-23." << endl;
-        }
+            try {
+                conto.CancellaTransazioniPerData(year_month_day{2023_y / 07 / 23});
+            } catch (const exception &e) {
+                cerr << "Errore durante la cancellazione delle transazioni in base alla data: " << e.what() << endl;
+            }
 
         cout << "\nTRANSAZIONI IN BASE ALL'IMPORTO" << endl;
         double importoCercato = 90.0;
