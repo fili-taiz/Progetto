@@ -9,7 +9,7 @@
 year_month_day parseDate(const string &DataStr) {
     istringstream ss(DataStr);
     tm tm = {};
-    ss >> std::get_time(&tm, "%Y-%m-%d");
+    ss >> get_time(&tm, "%Y-%m-%d");
     if (ss.fail()) {
         throw runtime_error("Errore nella conversione della data.");
     }
@@ -44,7 +44,7 @@ void ContoCorrente::effettuaTransazione(const Transazione &transazione) {
 }
 
 
-void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
+void ContoCorrente::salvaSuFile(const string &nomeFile) {
     ofstream file(nomeFile);
     if (!file) {
         cerr << "Errore nell'apertura del file." << endl;
@@ -52,7 +52,7 @@ void ContoCorrente::salvaSuFile(const std::string &nomeFile) {
     }
     for (const Transazione &transazione: transazioni) {
         file << format("%Y-%m-%d", transazione.getData()) << " " << transazione.getImporto()
-             << Transazione::TipoTransazioneToChar(transazione.getTipo()) << endl;
+             << Transazione::TipoTransazioneToChar(transazione.getTipo()) << " " << transazione.getDescrizione() << endl;
     }
 
     file.close();
@@ -66,14 +66,13 @@ void ContoCorrente::leggiDaFile(const string &nomeFile) {
     }
 
     try {
-        string dataStr;
+                string dataStr;
         double importo;
         char tipoChar;
         string descr;
-        while (file >> dataStr >> importo >> tipoChar) {
+        while (file >> dataStr >> importo >> tipoChar >> descr) {
             Transazione::TipoTransazione tipo = Transazione::CharToTipoTransazione(tipoChar);
             file.ignore(); // Ignora il carattere di newline dopo il carattere tipoChar
-            getline(file, descr);
 
             // Verifica se l'estrazione dei dati è avvenuta correttamente
             if (!file) {
@@ -92,7 +91,6 @@ void ContoCorrente::leggiDaFile(const string &nomeFile) {
         return;
     }
 
-    // Aggiornare il saldo utilizzando le transazioni lette da file
     aggiornaSaldo();
 }
 
@@ -189,12 +187,6 @@ void ContoCorrente::aggiornaSaldo() {
     }
 }
 
-vector<Transazione>::iterator ContoCorrente::trovaTransazione(const year_month_day &data, const string &descrizione) {
-    return std::find_if(transazioni.begin(), transazioni.end(), [data, descrizione](const Transazione &tr) {
-        return (tr.getData() == data && tr.getDescrizione() == descrizione);
-    });
-}
-
 bool ContoCorrente::CancellaTransazioniPerImporto(double importo) {
     double importoCancellato = 0.0;
     bool cancellazioneAvvenuta = false;
@@ -222,5 +214,7 @@ bool ContoCorrente::CancellaTransazioniPerImporto(double importo) {
     return cancellazioneAvvenuta;
 }
 
-
+size_t ContoCorrente::getNumeroTransazioni() const {
+    return transazioni.size();
+}
 

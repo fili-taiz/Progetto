@@ -2,7 +2,6 @@
 #include "../Transazione.h"
 #include "../ContoCorrente.h"
 
-// Test della classe Transazione
 TEST(TransazioneTest, TestCostruttore) {
     // Test costruttore con dati validi
     year_month_day data{2023_y / 07 / 22};
@@ -13,7 +12,6 @@ TEST(TransazioneTest, TestCostruttore) {
     ASSERT_EQ(trans1.getDescrizione(), "bonifico");
     ASSERT_EQ(trans1.getTipo(), Transazione::TipoTransazione::ENTRATA);
 
-    // Test costruttore con descrizione vuota
     Transazione trans2(50.0, data, "", Transazione::TipoTransazione::USCITA);
 
     ASSERT_DOUBLE_EQ(trans2.getImporto(), 50.0);
@@ -22,7 +20,6 @@ TEST(TransazioneTest, TestCostruttore) {
     ASSERT_EQ(trans2.getTipo(), Transazione::TipoTransazione::USCITA);
 }
 
-// Test della classe ContoCorrente
 TEST(ContoCorrenteTest, TestEffettuaTransazione) {
     ContoCorrente conto;
 
@@ -99,7 +96,91 @@ TEST(ContoCorrenteTest, TestCercaTransazioniPerTipo) {
     ASSERT_EQ(transazioniUscita[1].getTipo(), Transazione::TipoTransazione::USCITA);
 }
 
-TEST(ContoCorrenteTest, TestCancellaTransazioniPerData) {
+TEST(ContoCorrenteTest, TestCancellaTransazioniPerDataEsistente) {
+    ContoCorrente conto;
+    year_month_day data1{2023_y / 07 / 22};
+    year_month_day data2{2023_y / 07 / 23};
+
+    conto.effettuaTransazione(Transazione(100.0, data1, "bonifico", Transazione::TipoTransazione::ENTRATA));
+    conto.effettuaTransazione(Transazione(90.0, data2, "prelievo", Transazione::TipoTransazione::USCITA));
+
+    ASSERT_TRUE(conto.CancellaTransazioniPerData(data2));
+
+    vector<Transazione> transazioniData = conto.cercaTransazioniInBaseAllaData(data2);
+    ASSERT_EQ(transazioniData.size(), 0);
+}
+
+TEST(ContoCorrenteTest, TestCancellaTransazioniPerDataInesistente) {
+    ContoCorrente conto;
+    year_month_day data1{2023_y / 07 / 22};
+    year_month_day data2{2023_y / 07 / 24};
+
+    conto.effettuaTransazione(Transazione(100.0, data1, "bonifico", Transazione::TipoTransazione::ENTRATA));
+
+    ASSERT_THROW(conto.CancellaTransazioniPerData(data2), runtime_error);
+
+    ASSERT_DOUBLE_EQ(conto.getSaldo(), 100.0);
+}
+
+TEST(ContoCorrenteTest, TestCancellaTransazioniPerDataConEccezione) {
+    ContoCorrente conto;
+    year_month_day data1{2023_y / 07 / 22};
+    year_month_day data2{2023_y / 07 / 23};
+
+    conto.effettuaTransazione(Transazione(100.0, data1, "bonifico", Transazione::TipoTransazione::ENTRATA));
+    conto.effettuaTransazione(Transazione(90.0, data2, "prelievo", Transazione::TipoTransazione::USCITA));
+
+    ASSERT_THROW(conto.CancellaTransazioniPerData(data2), runtime_error);
+
+    ASSERT_DOUBLE_EQ(conto.getSaldo(), 100.0);
+}
+
+TEST(ContoCorrenteTest, TestCancellaTransazioniPerImportoEsistente) {
+    ContoCorrente conto;
+
+    conto.effettuaTransazione(
+            Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico", Transazione::TipoTransazione::ENTRATA));
+    conto.effettuaTransazione(
+            Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
+    conto.effettuaTransazione(
+            Transazione(200.0, year_month_day{2023_y / 07 / 24}, "bonifico", Transazione::TipoTransazione::ENTRATA));
+
+    ASSERT_NO_THROW(conto.CancellaTransazioniPerImporto(90.0));
+
+    vector<Transazione> transazioniImporto = conto.cercaTransazioniPerImporto(90.0);
+    ASSERT_EQ(transazioniImporto.size(), 0);
+
+    ASSERT_DOUBLE_EQ(conto.getSaldo(), 300.0);
+}
+
+TEST(ContoCorrenteTest, TestCancellaTransazioniPerImportoInesistente) {
+    ContoCorrente conto;
+
+    conto.effettuaTransazione(
+            Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico", Transazione::TipoTransazione::ENTRATA));
+    conto.effettuaTransazione(
+            Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
+
+    ASSERT_THROW(conto.CancellaTransazioniPerImporto(200.0), std::runtime_error);
+
+    ASSERT_DOUBLE_EQ(conto.getSaldo(), 10.0);
+}
+
+TEST(ContoCorrenteTest, TestCancellaTransazioniPerImportoConEccezione) {
+    ContoCorrente conto;
+
+    conto.effettuaTransazione(
+            Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico", Transazione::TipoTransazione::ENTRATA));
+    conto.effettuaTransazione(
+            Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
+
+    ASSERT_THROW(conto.CancellaTransazioniPerImporto(90.0), std::runtime_error);
+
+    ASSERT_DOUBLE_EQ(conto.getSaldo(), 10.0);
+}
+
+TEST(ContoCorrenteTest, TestCercaTransazioniInBaseAllaData) {
+
     ContoCorrente conto;
     year_month_day data1{2023_y / 07 / 22};
     conto.effettuaTransazione(Transazione(100.0, data1, "bonifico", Transazione::TipoTransazione::ENTRATA));
@@ -113,35 +194,53 @@ TEST(ContoCorrenteTest, TestCancellaTransazioniPerData) {
     year_month_day data4{2023_y / 07 / 25};
     conto.effettuaTransazione(Transazione(200.0, data4, "bonifico", Transazione::TipoTransazione::ENTRATA));
 
-    ASSERT_TRUE(conto.CancellaTransazioniPerData(data2));
-    ASSERT_FALSE(conto.CancellaTransazioniPerData(year_month_day{2023_y / 07 / 26}));
+    year_month_day dataDaCercare{2023_y / 07 / 23};
+    vector<Transazione> transazioniTrovate = conto.cercaTransazioniInBaseAllaData(dataDaCercare);
+
+    ASSERT_EQ(transazioniTrovate.size(), 1);
+    ASSERT_EQ(transazioniTrovate[0].getData(), dataDaCercare);
 }
 
+TEST(ContoCorrenteTest, TestSalvaSuFile) {
+    ContoCorrente conto;
+    year_month_day data1{2023_y / 07 / 22};
+    conto.effettuaTransazione(Transazione(100.0, data1, "bonifico", Transazione::TipoTransazione::ENTRATA));
 
+    year_month_day data2{2023_y / 07 / 23};
+    conto.effettuaTransazione(Transazione(90.0, data2, "prelievo", Transazione::TipoTransazione::USCITA));
 
-// Test case per il metodo CancellaTransazioniPerImporto
-TEST(ContoCorrenteTest, CancellaTransazioniPerImporto) {
+    const string nomeFile = "test_transazioni.txt";
+
+    conto.salvaSuFile(nomeFile);
+
+    ifstream file(nomeFile);
+    ASSERT_TRUE(file.is_open());
+
+    string linea;
+    getline(file, linea);
+    ASSERT_EQ(linea, "2023-07-22 100.0 E bonifico");
+
+    getline(file, linea);
+    ASSERT_EQ(linea, "2023-07-23 90.0 U prelievo");
+
+    file.close();
+}
+
+TEST(ContoCorrenteTest, TestLeggiDaFile) {
+    ofstream inputFile("test_input.txt");
+    inputFile << "2023-07-22 100.0 E bonifico" << std::endl;
+    inputFile << "2023-07-23 90.0 U prelievo" << std::endl;
+    inputFile.close();
+
     ContoCorrente conto;
 
-    // Aggiungiamo alcune transazioni al conto
-    conto.effettuaTransazione(
-            Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico", Transazione::TipoTransazione::ENTRATA));
-    conto.effettuaTransazione(
-            Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
-    conto.effettuaTransazione(
-            Transazione(200.0, year_month_day{2023_y / 07 / 24}, "bonifico", Transazione::TipoTransazione::ENTRATA));
-    conto.effettuaTransazione(
-            Transazione(90.0, year_month_day{2023_y / 07 / 25}, "prelievo", Transazione::TipoTransazione::USCITA));
+    ASSERT_NO_THROW(conto.leggiDaFile("test_input.txt"));
 
-    // Cancella transazioni con importo 90.0
-    ASSERT_NO_THROW(conto.CancellaTransazioniPerImporto(100.0));
+    ASSERT_EQ(conto.getNumeroTransazioni(), 2);
+    ASSERT_DOUBLE_EQ(conto.getSaldo(), 10.0);
 
-    // Verifica che le transazioni con importo 90.0 siano state rimosse
-    vector<Transazione> transazioniPerImporto = conto.cercaTransazioniPerImporto(100.0);
-    ASSERT_EQ(transazioniPerImporto.size(), 0);
+    ASSERT_THROW(conto.leggiDaFile("file_inesistente.txt"), runtime_error);
 
-    // Verifica che il saldo sia stato aggiornato correttamente dopo la cancellazione
-    ASSERT_EQ(conto.getSaldo(), 380.0);
+    remove("test_input.txt");
 }
-
 

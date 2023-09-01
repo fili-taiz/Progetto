@@ -21,6 +21,8 @@ public:
 
     double getSaldo() const;
 
+    size_t getNumeroTransazioni() const;
+
     vector<Transazione> cercaTransazioniInBaseAllaData(const year_month_day &data) const;
 
     vector<Transazione> cercaTransazioniPerImporto(double importo) const;
@@ -44,7 +46,6 @@ private:
 
     void aggiornaSaldo();
 
-    vector<Transazione>::iterator trovaTransazione(const year_month_day &data, const string &descrizione);
 };
 
 
