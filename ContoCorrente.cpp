@@ -196,7 +196,9 @@ bool ContoCorrente::CancellaTransazioniPerImporto(double importo) {
     auto newEnd = remove_if(transazioni.begin(), transazioni.end(),
                             [importo, &importoCancellato, &cancellazioneAvvenuta](const Transazione &tr) {
                                 if (tr.getImporto() == importo) {
-                                    importoCancellato += tr.getImporto();
+                                    double tmp = tr.getImporto();
+                                    tmp = tr.getTipo() == Transazione::TipoTransazione::USCITA ? tmp : -tmp;
+                                    importoCancellato += tmp;
                                     cancellazioneAvvenuta = true;
                                     return true;
                                 }
@@ -205,7 +207,7 @@ bool ContoCorrente::CancellaTransazioniPerImporto(double importo) {
 
     if (cancellazioneAvvenuta) {
         transazioni.erase(newEnd, transazioni.end());
-        saldo -= importoCancellato;
+        saldo += importoCancellato;
         cout << "Le transazioni con importo " << importo << " euro sono state cancellate!" << endl;
         cout << "Saldo corrente dopo la cancellazione: " << getSaldo() << " euro" << endl;
     } else {
