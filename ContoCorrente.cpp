@@ -124,7 +124,9 @@ bool ContoCorrente::CancellaTransazioniPerData(const year_month_day &data) {
     auto newEnd = remove_if(transazioni.begin(), transazioni.end(),
                             [data, &importoCancellato, &cancellazioneAvvenuta](const Transazione &tr) {
                                 if (tr.getData() == data) {
-                                    importoCancellato += tr.getImporto();
+                                    double tmp = tr.getImporto();
+                                    tmp = tr.getTipo() == Transazione::TipoTransazione::USCITA ? tmp : -tmp;
+                                    importoCancellato += tmp;
                                     cancellazioneAvvenuta = true;
                                     return true;
                                 }
