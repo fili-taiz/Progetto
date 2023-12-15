@@ -192,16 +192,6 @@ vector<Transazione> ContoCorrente::cercaTransazioniPerDescrizione(const string &
     return transazioniDescrizione;
 }
 
-void ContoCorrente::aggiornaSaldo() {
-    saldo = 0.0;
-    for (const Transazione &transazione: transazioni) {
-        if (transazione.getImporto() > 0) {
-            saldo += transazione.getImporto();
-        } else if (transazione.getImporto() < 0) {
-            saldo -= transazione.getImporto();
-        }
-    }
-}
 
 bool ContoCorrente::CancellaTransazioniPerImporto(double importo) {
     double importoCancellato = 0.0;

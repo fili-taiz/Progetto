@@ -17,8 +17,6 @@ public:
 
     void leggiDaFile(const string &nomeFile);
 
-    void stampaTransazioni() const;
-
     double getSaldo() const;
 
     size_t getNumeroTransazioni() const;
@@ -44,7 +42,6 @@ private:
     double saldo = 0;
     vector<Transazione> transazioni;
 
-    void aggiornaSaldo();
 
 };
 
