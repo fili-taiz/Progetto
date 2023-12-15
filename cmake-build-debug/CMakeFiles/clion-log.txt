@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.2.3/bin/ninja/win/ninja.exe" -G Ninja -S C:\Users\ft001\Desktop\Progetto -B C:\Users\ft001\Desktop\Progetto\cmake-build-debug
+"C:\Program Files\JetBrains\CLion 2022.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files/JetBrains/CLion 2022.2.3/bin/ninja/win/ninja.exe" -G Ninja -S C:\Users\ft001\Desktop\Progetto1\Progetto -B C:\Users\ft001\Desktop\Progetto1\Progetto\cmake-build-debug
 -- The C compiler identification is GNU 11.2.0
 -- The CXX compiler identification is GNU 11.2.0
 -- Detecting C compiler ABI info
@@ -11,7 +11,7 @@
 -- Check for working CXX compiler: C:/Program Files/JetBrains/CLion 2022.2.3/bin/mingw/bin/g++.exe - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Could NOT find Python3 (missing: Python3_EXECUTABLE Interpreter) 
+-- Found Python: C:/Users/ft001/AppData/Local/Programs/Python/Python311/python.exe (found version "3.11.5") found components: Interpreter 
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/Users/ft001/Desktop/Progetto/cmake-build-debug
+-- Build files have been written to: C:/Users/ft001/Desktop/Progetto1/Progetto/cmake-build-debug

@@ -30,7 +30,6 @@ void ContoCorrente::effettuaTransazione(const Transazione &transazione) {
         saldo += transazione.getImporto();
         cout << "Deposito sul conto avvenuto con successo!" << endl;
     } else if (tipoTransazione == Transazione::TipoTransazione::USCITA) {
-        // Verifica se c'è abbastanza saldo per il prelievo
         if (saldo >= transazione.getImporto()) {
             saldo -= transazione.getImporto();
             cout << "Prelievo avvenuto con successo!" << endl;
@@ -52,56 +51,70 @@ void ContoCorrente::salvaSuFile(const string &nomeFile) {
     }
     for (const Transazione &transazione: transazioni) {
         file << format("%Y-%m-%d", transazione.getData()) << " " << transazione.getImporto()
-             << Transazione::TipoTransazioneToChar(transazione.getTipo()) << " " << transazione.getDescrizione() << endl;
+             << Transazione::TipoTransazioneToChar(transazione.getTipo()) << " " << transazione.getDescrizione()
+             << endl;
     }
 
     file.close();
 }
 
 void ContoCorrente::leggiDaFile(const string &nomeFile) {
+    transazioni.clear();
+    this->saldo = 0;
     ifstream file(nomeFile);
+    string tmp;
     if (!file.is_open()) {
         cerr << "Impossibile aprire il file " << nomeFile << " per la lettura." << endl;
         return;
     }
 
     try {
-                string dataStr;
-        double importo;
-        char tipoChar;
-        string descr;
-        while (file >> dataStr >> importo >> tipoChar >> descr) {
-            Transazione::TipoTransazione tipo = Transazione::CharToTipoTransazione(tipoChar);
-            file.ignore(); // Ignora il carattere di newline dopo il carattere tipoChar
-
-            // Verifica se l'estrazione dei dati è avvenuta correttamente
+        while (getline(file, tmp)) {
             if (!file) {
                 cerr << "Errore nella lettura dei dati dalla transazione." << endl;
                 break;
             }
 
-            year_month_day data = parseDate(dataStr);
-            transazioni.emplace_back(importo, data, descr, tipo);
-        }
+            string dataStr;
+            double importo;
+            char tipoChar;
+            string descr;
+            stringstream ss(tmp);
+            string parola;
+            vector<string> tokens;
+            while (!ss.eof()) {
+                getline(ss, parola, ' ');
+                tokens.push_back(parola);
+            }
+            dataStr = tokens[0];
+            importo = stod(tokens[1]);
+            descr = tokens[2];
 
+
+            Transazione::TipoTransazione tipoTr = (tipoChar == 'E') ? Transazione::TipoTransazione::ENTRATA
+                                                                    : Transazione::TipoTransazione::USCITA;
+
+            Transazione nuovaTransazione(importo, parseDate(dataStr), descr, tipoTr);
+            transazioni.push_back(nuovaTransazione);
+            if (tipoTr == Transazione::TipoTransazione::ENTRATA) {
+                this->saldo += importo;
+            }
+            else {
+                importo = -importo;
+                this->saldo += importo;
+            }
+            ss.clear();
+
+        }
         file.close();
     } catch (const exception &e) {
         cerr << "Errore durante la lettura del file: " << e.what() << endl;
-        file.close(); // Chiudi il file in caso di errore
+        file.close();
         return;
     }
 
-    aggiornaSaldo();
+    //aggiornaSaldo();
 }
-
-
-void ContoCorrente::stampaTransazioni() const {
-    cout << "Transazioni:" << endl;
-    for (const Transazione &trans: transazioni) {
-        cout << trans.toString() << endl;
-    }
-}
-
 
 double ContoCorrente::getSaldo() const {
     return saldo;
@@ -142,11 +155,13 @@ bool ContoCorrente::CancellaTransazioniPerData(const year_month_day &data) {
         throw runtime_error(
                 "Nessuna transazione trovata in data " + format("%F", data) + ". La cancellazione non e' avvenuta.");
     }
-
+    if (cancellazioneAvvenuta) {
+        ofstream canc("transazioni.txt");
+        canc.close();
+        salvaSuFile("transazioni.txt");
+    }
     return cancellazioneAvvenuta;
 }
-
-//ritornare un booleano se non esiste la transazione da cancellare
 
 vector<Transazione> ContoCorrente::cercaTransazioniPerTipo(Transazione::TipoTransazione tipo) const {
     vector<Transazione> transazioniTipo;
@@ -214,7 +229,11 @@ bool ContoCorrente::CancellaTransazioniPerImporto(double importo) {
         throw runtime_error("Nessuna transazione trovata con importo " + to_string(importo) +
                             " euro. La cancellazione non e' avvenuta.");
     }
-
+    if (cancellazioneAvvenuta) {
+        ofstream canc("transazioni.txt");
+        canc.close();
+        salvaSuFile("transazioni.txt");
+    }
     return cancellazioneAvvenuta;
 }
 
