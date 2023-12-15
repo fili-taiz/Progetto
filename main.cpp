@@ -78,7 +78,6 @@ int main() {
             cerr << "Errore durante la cancellazione delle transazioni per importo: " << e.what() << endl;
         }
 
-        cout<<"TRANSAZIONI NEL FILE"<<endl;
 
         conto.leggiDaFile("transazioni.txt");
 
