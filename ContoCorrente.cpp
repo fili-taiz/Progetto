@@ -87,9 +87,9 @@ void ContoCorrente::leggiDaFile(const string &nomeFile) {
                 tokens.push_back(parola);
             }
             dataStr = tokens[0];
+            tipoChar = tokens[1].back();
             importo = stod(tokens[1]);
             descr = tokens[2];
-
 
             Transazione::TipoTransazione tipoTr = (tipoChar == 'E') ? Transazione::TipoTransazione::ENTRATA
                                                                     : Transazione::TipoTransazione::USCITA;
@@ -100,8 +100,7 @@ void ContoCorrente::leggiDaFile(const string &nomeFile) {
                 this->saldo += importo;
             }
             else {
-                importo = -importo;
-                this->saldo += importo;
+                this->saldo -= importo;
             }
             ss.clear();
 
