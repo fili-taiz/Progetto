@@ -17,9 +17,9 @@ public:
 
     void leggiDaFile(const string &nomeFile);
 
-    void stampaTransazioni() const;
-
     double getSaldo() const;
+
+    size_t getNumeroTransazioni() const;
 
     vector<Transazione> cercaTransazioniInBaseAllaData(const year_month_day &data) const;
 
@@ -42,9 +42,7 @@ private:
     double saldo = 0;
     vector<Transazione> transazioni;
 
-    void aggiornaSaldo();
 
-    vector<Transazione>::iterator trovaTransazione(const year_month_day &data, const string &descrizione);
 };
 
 

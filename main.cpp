@@ -2,21 +2,21 @@
 
 #include <iostream>
 #include "ContoCorrente.h"
-
 int main() {
     try {
         ContoCorrente conto;
-
         conto.effettuaTransazione(Transazione(100.0, year_month_day{2023_y / 07 / 22}, "bonifico",
                                               Transazione::TipoTransazione::ENTRATA));
         conto.effettuaTransazione(
                 Transazione(90.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
         conto.effettuaTransazione(
-                Transazione(5.0, year_month_day{2023_y / 07 / 23}, "prelievo", Transazione::TipoTransazione::USCITA));
+                Transazione(5.0, year_month_day{2023_y / 07 / 23}, "finanziamento", Transazione::TipoTransazione::USCITA));
         conto.effettuaTransazione(Transazione(200.0, year_month_day{2023_y / 07 / 24}, "bonifico",
                                               Transazione::TipoTransazione::ENTRATA));
         conto.effettuaTransazione(
                 Transazione(90.0, year_month_day{2023_y / 07 / 25}, "prelievo", Transazione::TipoTransazione::USCITA));
+
+        conto.salvaSuFile("transazioni.txt");
 
         cout << "\nTRANSAZIONI IN BASE ALLA DATA" << endl;
         vector<Transazione> transazioniData = conto.cercaTransazioniInBaseAllaData(year_month_day{2023_y / 07 / 23});
@@ -78,17 +78,8 @@ int main() {
             cerr << "Errore durante la cancellazione delle transazioni per importo: " << e.what() << endl;
         }
 
-        cout << "\nSALVA LE TRANSAZIONI SU FILE" << endl;
-        conto.salvaSuFile("transazioni.txt");
 
-        cout << "\nLEGGE LE TRANSAZIONI DA FILE" << endl;
         conto.leggiDaFile("transazioni.txt");
-
-        cout << "\nSTAMPA TUTTE LE TRANSAZIONI DOPO LA LETTURA DA FILE" << endl;
-        conto.stampaTransazioni();
-
-
-        cout << "-----------" << endl;
 
 
     } catch (const exception &e) {

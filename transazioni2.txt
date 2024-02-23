@@ -1,5 +1,0 @@
-Entrata|10111
-Entrata|20299
-Uscita|10877
-Entrata|21876
-Uscita|876.65
